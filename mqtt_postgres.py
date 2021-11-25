@@ -76,22 +76,22 @@ def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
 
 
 def on_connect(client,userdata,flags,rc):
-    with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-        if rc == 0:
-            log.write("Broker connected\n")
-            #data={'user': 'mqtt_server','password':'ahtmzlxh1234'}
-            #POST 방식, JSON은 아님.
-            #res=requests.post(URL+'api-token-auth/',data=data)
-            #if res.status_code == 200 :
-            #    Token=res.json()["token"]
-            #    log.write(" REST server login success.\n")
-            #else :
-            #    log.write(str(res.status_code) + " REST server login error\n")
-            #    log.write(res.text + '\n')
+#     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#         if rc == 0:
+#             log.write("Broker connected\n")
+#             #data={'user': 'mqtt_server','password':'ahtmzlxh1234'}
+#             #POST 방식, JSON은 아님.
+#             #res=requests.post(URL+'api-token-auth/',data=data)
+#             #if res.status_code == 200 :
+#             #    Token=res.json()["token"]
+#             #    log.write(" REST server login success.\n")
+#             #else :
+#             #    log.write(str(res.status_code) + " REST server login error\n")
+#             #    log.write(res.text + '\n')
 
-        else:
-            log.write("Broker connection failure : " + str(rc))
-        log.write(str(datetime.datetime.now()) + '\n')
+#         else:
+#             log.write("Broker connection failure : " + str(rc))
+#         log.write(str(datetime.datetime.now()) + '\n')
     
 
 def on_disconnect(client, userdata, flags, rc=0):
@@ -103,9 +103,9 @@ def on_disconnect(client, userdata, flags, rc=0):
 
 
 def on_subscribe(client,userdata,mid,granted_qos):
-    with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-        log.write("subscribed : " + TOPIC + " qos : "+ str(granted_qos) + '\n')
-        log.write(str(datetime.datetime.now()) + '\n')
+#     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#         log.write("subscribed : " + TOPIC + " qos : "+ str(granted_qos) + '\n')
+#         log.write(str(datetime.datetime.now()) + '\n')
 
 def on_message(client,userdata,msg):
     
@@ -163,7 +163,6 @@ client.subscribe(TOPIC,QOS)
 rc=0
 while rc == 0:
     rc = client.loop()
-    sleep(1)
 
 with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
     log.write("end of python code.\n")
