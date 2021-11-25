@@ -1,0 +1,16 @@
+version: 0.0
+
+os: linux
+files:
+
+  - source: /
+    destination: /etc/mosquitto/
+file_exists_behavior: OVERWRITE
+hooks:
+  BeforeInstall:
+    - location: scripts/KRservertime.sh
+      runas: root
+  AfterInstall:
+    - location: scripts/restart_server.sh
+      timeout: 300
+      runas: root
