@@ -98,7 +98,7 @@ def on_message(client,userdata,msg):
         
         data=str(msg.payload.decode("utf-8"))
         # data='{ "is_add" : 1 , "machine" : 55 , "car_number" : "12허 1234", "sensor" : {"Temp" : 21.0, "CO2" : 10.5 , "NO2" : 53.2 } }'
-        log.write(data)
+        log.write(data + '\n')
         
         try :
                   j=json.loads(data)
