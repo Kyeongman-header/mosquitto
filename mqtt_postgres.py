@@ -12,7 +12,7 @@ HOST='localhost'
 USER='subscriber'
 PASSWORD='mypassword'
 PORT=8883
-TOPIC='auton'
+TOPIC='auton/airfilter'
 QOS=1
 
 DB_HOST='10.0.10.161'
@@ -78,7 +78,7 @@ def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
 
 def on_connect(client,userdata,flags,rc):
     client.subscribe(TOPIC,QOS)
-    with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+    with open("/home/ubuntu/mqtt_postgres.log",'w') as log :
         log.write("connection,subscribe success. "+ str(flags)+ "result code : " + str(rc) + '\n')
         log.write(str(datetime.datetime.now()) + '\n')
     
