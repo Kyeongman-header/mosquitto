@@ -95,7 +95,7 @@ def on_connect(client,userdata,flags,rc):
 #         log.write(str(datetime.datetime.now()) + '\n')
     
 
- def on_disconnect(client, userdata, flags, rc=0):
+def on_disconnect(client, userdata, flags, rc=0):
     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
         log.write("disconnection success. "+str(flags)+ "result code : " + str(rc) + '\n')
         log.write(str(datetime.datetime.now()) + '\n')
