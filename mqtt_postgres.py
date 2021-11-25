@@ -12,7 +12,7 @@ HOST='localhost'
 USER='subscriber'
 PASSWORD='mypassword'
 PORT=8883
-TOPIC='auton/airfilter'
+TOPIC='auton'
 QOS=1
 
 DB_HOST='10.0.10.161'
@@ -76,38 +76,17 @@ def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
 
 
 def on_connect(client,userdata,flags,rc):
-    pass
-#     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-#         if rc == 0:
-#             log.write("Broker connected\n")
-#             #data={'user': 'mqtt_server','password':'ahtmzlxh1234'}
-#             #POST 방식, JSON은 아님.
-#             #res=requests.post(URL+'api-token-auth/',data=data)
-#             #if res.status_code == 200 :
-#             #    Token=res.json()["token"]
-#             #    log.write(" REST server login success.\n")
-#             #else :
-#             #    log.write(str(res.status_code) + " REST server login error\n")
-#             #    log.write(res.text + '\n')
-
-#         else:
-#             log.write("Broker connection failure : " + str(rc))
-#         log.write(str(datetime.datetime.now()) + '\n')
+    client.subscribe(TOPIC,QOS)
+    with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+        log.write("connection,subscribe success. "+ str(flags)+ "result code : " + str(rc) + '\n')
+        log.write(str(datetime.datetime.now()) + '\n')
     
 
 def on_disconnect(client, userdata, flags, rc=0):
     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
         log.write("disconnection success. "+str(flags)+ "result code : " + str(rc) + '\n')
         log.write(str(datetime.datetime.now()) + '\n')
-        log.close()
-            
 
-
-def on_subscribe(client,userdata,mid,granted_qos):
-    pass
-#     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-#         log.write("subscribed : " + TOPIC + " qos : "+ str(granted_qos) + '\n')
-#         log.write(str(datetime.datetime.now()) + '\n')
 
 def on_message(client,userdata,msg):
     
@@ -154,17 +133,11 @@ def on_message(client,userdata,msg):
 client=mqtt.Client()
 client.on_connect=on_connect
 client.on_disconnect=on_disconnect
-client.on_subscribe=on_subscribe
 client.on_message=on_message
-
 client.username_pw_set(username=USER,password=PASSWORD)
+client.connect(HOST,PORT,)
 
-client.connect(HOST,PORT)
-client.subscribe(TOPIC,QOS)
-
-rc=0
-while rc == 0:
-    rc = client.loop()
+client.loop_forever()
 
 with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
     log.write("end of python code.\n")
