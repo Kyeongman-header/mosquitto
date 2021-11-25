@@ -95,13 +95,15 @@ def on_message(client,userdata,msg):
     # 지금은 0 번째 숫자로 추가인지 아닌지 가리고, 1,2번째 숫자가 sensor값(혹은 차 넘버),
     #3번째 숫자가 machine 고유 번호임.
     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-        log.write("on-message event occur.\n")
+        
         data=str(msg.payload.decode("utf-8"))
         # data='{ "is_add" : 1 , "machine" : 55 , "car_number" : "12허 1234", "sensor" : {"Temp" : 21.0, "CO2" : 10.5 , "NO2" : 53.2 } }'
+        log.write(data)
+        
         try :
                   j=json.loads(data)
         except :
-                  log.write("Wrong Format. Try again.")
+                  log.write("Wrong Format. Try again.\n")
         
         else :
             is_add=j["is_add"]
