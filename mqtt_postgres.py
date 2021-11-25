@@ -74,6 +74,7 @@ def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
 
     conn.close()
 
+    
 
 def on_connect(client,userdata,flags,rc):
     client.subscribe(TOPIC,QOS)
@@ -102,16 +103,17 @@ def on_message(client,userdata,msg):
         except :
                   log.write("Wrong Format. Try again.")
         
-        is_add=j["is_add"]
-        sensor=j["sensor"]
-        machine_id=j["machine"]
-        car_number=j["car_number"]
+        else :
+            is_add=j["is_add"]
+            sensor=j["sensor"]
+            machine_id=j["machine"]
+            car_number=j["car_number"]
         #token='Token ' + Token
         #headers={'Authorization' : token}
         
-        if is_add==1:
+            if is_add==1:
             #log.write("is_add : " + is_add + " car_number : " + car_number + " machine_id : " + machine_id + '\n')
-            postgres_machine_add(DB_HOST,DB_USER,DB_PASSWORD,DB,car_number,machine_id)
+                postgres_machine_add(DB_HOST,DB_USER,DB_PASSWORD,DB,car_number,machine_id)
 #             data={ "id" : int(machine_id), "car_number" : sensor_or_car_number }
 #             res=requests.post(URL+'api/machine/',headers=headers,data=data)
 #             if res.status_code ==201:
@@ -120,9 +122,9 @@ def on_message(client,userdata,msg):
 #                 log.write( str(res.status_code) + " error add machine. " + machine_id + '\n')
 #                 log.write( res.text + '\n' )
 
-        else :
+            else :
             #log.write("is_add : " + is_add + " sensor : " + json.dumps(sensor) + " machine_id : " + machine_id + '\n')
-            postgres_sensor_insert(DB_HOST,DB_USER,DB_PASSWORD,DB,json.dumps(sensor),machine_id)
+                postgres_sensor_insert(DB_HOST,DB_USER,DB_PASSWORD,DB,json.dumps(sensor),machine_id)
 #             data={ "machine" : int(machine_id), "sensor" : int(sensor_or_car_number) }
 #             res=requests.post(URL+'api/sensor/',headers=headers,data=data)
 #             if res.status_code == 201:
