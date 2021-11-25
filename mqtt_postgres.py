@@ -78,7 +78,7 @@ def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
 
 def on_connect(client,userdata,flags,rc):
     client.subscribe(TOPIC,QOS)
-    with open("/home/ubuntu/mqtt_postgres.log",'w') as log :
+    with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
         log.write("connection,subscribe success. "+ str(flags)+ "result code : " + str(rc) + '\n')
         log.write(str(datetime.datetime.now()) + '\n')
     
