@@ -107,12 +107,10 @@ def on_message(client,userdata,msg):
             machine_id=j["machine"]
             car_number=j["car_number"]
         
-            shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
-            
-            stream=os.popen(shell)
-            log.write(shell + '\n')
-            output=stream.read()
-            #log.write(output + '\n')
+#            shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
+#            log.write(shell + '\n')
+#            output=stream.read()
+#            log.write(output + '\n')
 # 고등기술연구원과 테스트가 끝나면, 해당 코드를 실험해볼것.
             
             if is_add==1:
