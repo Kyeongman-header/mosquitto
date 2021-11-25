@@ -1,12 +1,8 @@
 import paho.mqtt.client as mqtt
 import psycopg2 as pg2
 import datetime
-
+import os
 import json
-
-# import requests
-# URL='https://auton-iot.com/'
-# Token=''
 
 HOST='localhost'
 USER='subscriber'
@@ -97,7 +93,7 @@ def on_message(client,userdata,msg):
     with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
         
         data=str(msg.payload.decode("utf-8"))
-        # data='{ "is_add" : 1 , "machine" : 55 , "car_number" : "12허 1234", "sensor" : {"Temp" : 21.0, "CO2" : 10.5 , "NO2" : 53.2 } }'
+
         log.write(data + '\n')
         
         try :
@@ -110,31 +106,26 @@ def on_message(client,userdata,msg):
             sensor=j["sensor"]
             machine_id=j["machine"]
             car_number=j["car_number"]
-        #token='Token ' + Token
-        #headers={'Authorization' : token}
         
+            shell = 'curl -d ' + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + '-H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST http://auton-iot.com/mqtt_postgres/'
+            stream=os.popen(shell)
+            output=stream.read()
+            log.write(output + '\n')
+# 고등기술연구원과 테스트가 끝나면, 해당 코드를 실험해볼것.
+            
             if is_add==1:
-            #log.write("is_add : " + is_add + " car_number : " + car_number + " machine_id : " + machine_id + '\n')
+           
+
                 postgres_machine_add(DB_HOST,DB_USER,DB_PASSWORD,DB,car_number,machine_id)
-#             data={ "id" : int(machine_id), "car_number" : sensor_or_car_number }
-#             res=requests.post(URL+'api/machine/',headers=headers,data=data)
-#             if res.status_code ==201:
-#                 log.write( str(res.status_code) + " successfully add machine " + machine_id + " " + str(res.json()["pub_date"]) + '\n')
-#             else :
-#                 log.write( str(res.status_code) + " error add machine. " + machine_id + '\n')
-#                 log.write( res.text + '\n' )
+            # 현재 알 수 없는 오류로 postgres 에 insert가 실패할 시 이 client도 연결이 끊김.(재루프.)
+            # 당장은 기능 자체에 문제는 없지만 이 경우 장기적으로 버그를 발생시킬 가능성이 있음.
+            # 또한 보안적인 문제 때문에라도 결국은 rest api로 갈아타야 함.
+
 
             else :
-            #log.write("is_add : " + is_add + " sensor : " + json.dumps(sensor) + " machine_id : " + machine_id + '\n')
+
                 postgres_sensor_insert(DB_HOST,DB_USER,DB_PASSWORD,DB,json.dumps(sensor),machine_id)
-#             data={ "machine" : int(machine_id), "sensor" : int(sensor_or_car_number) }
-#             res=requests.post(URL+'api/sensor/',headers=headers,data=data)
-#             if res.status_code == 201:
-#                 log.write( str(res.status_code) + "successfully updating sensor data. " + machine_id + " " + str(res.json()["pub_date"]) + '\n')
-#             else :
-#                 log.write( str(res.status_code) + "error updating sensor data. " + machine_id + '\n')
-#                 log.write( res.text + '\n')
-           
+
     
         log.write(str(datetime.datetime.now()) + '\n')
 
