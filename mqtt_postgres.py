@@ -31,11 +31,11 @@ def postgres_machine_add(host,user,password,db,car_number,machine_id):
     cur=conn.cursor()
     query=f"INSERT INTO airfilter_machine(id,car_number,pub_date) VALUES ({machine_id}, {car_number},current_timestamp)"
     try :
-        cur.execute("INSERT INTO airfilter_machine(id,car_number,pub_date) VALUES (%s, %s,current_timestamp)",(str(machine_id),str(car_number)))
+        cur.execute("INSERT INTO airfilter_machine(id,car_number,pub_date) VALUES (%s, %s,current_timestamp)\n",(str(machine_id),str(car_number)))
         conn.commit()
     except pg2.DatabaseError as dberror:
         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            log.write("-----------------------\n insert query to machine table error :(\n ----------------------")
+            log.write("-----------------------\n insert query to machine table error :(\n ----------------------\n")
             log.write(dberror)
             conn.rollback()
     else :
@@ -51,7 +51,7 @@ def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
     except Exception as e:
         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
             with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-                log.write("-----------------\n postgre sql connection error :(\n--------------------")
+                log.write("-----------------\n postgre sql connection error :(\n--------------------\n")
                 log.write(e)
         return
 
@@ -60,11 +60,11 @@ def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
     query=f"INSERT INTO airfilter_sensor (machine_id,sensor,pub_date) VALUES ('{machine_id}', '{sensor}',current_timestamp)"
     
     try :
-        cur.execute("INSERT INTO airfilter_sensor (machine_id,sensor,pub_date) VALUES (%s, %s, current_timestamp)",(str(machine_id),str(sensor)))
+        cur.execute("INSERT INTO airfilter_sensor (machine_id,sensor,pub_date) VALUES (%s, %s, current_timestamp)\n",(str(machine_id),str(sensor)))
         conn.commit()
     except pg2.DatabaseError as dberror:
         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            log.write("------------------------\ninsert query to sensor table error :(\n-----------------------")
+            log.write("------------------------\ninsert query to sensor table error :(\n-----------------------\n")
             log.write(dberror)
             conn.rollback()
     else :
