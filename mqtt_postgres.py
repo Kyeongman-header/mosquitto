@@ -115,6 +115,7 @@ def on_message(client,userdata,msg):
                 # test가 끝나면 이 부분은 삭제할 예정.
                 shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id, "car_number" : car_number }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
                 log.write(shell + '\n')
+                stream=os.popen(shell)
                 output=stream.read()
                 log.write(output + '\n')
 
@@ -127,6 +128,7 @@ def on_message(client,userdata,msg):
             else :
                 shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
                 log.write(shell + '\n')
+                stream=os.popen(shell)
                 output=stream.read()
                 log.write(output + '\n')
                 #postgres_sensor_insert(DB_HOST,DB_USER,DB_PASSWORD,DB,json.dumps(sensor),machine_id)
