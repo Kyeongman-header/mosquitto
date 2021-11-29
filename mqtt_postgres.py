@@ -7,7 +7,7 @@ import json
 HOST='localhost'
 USER='subscriber'
 PASSWORD='mypassword'
-PORT=8883
+PORT=1883
 TOPIC='auton/airfilter'
 QOS=1
 
