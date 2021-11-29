@@ -107,24 +107,29 @@ def on_message(client,userdata,msg):
             machine_id=j["machine"]
             car_number=j["car_number"]
         
-#            shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
-#            log.write(shell + '\n')
-#            output=stream.read()
-#            log.write(output + '\n')
+
 # 고등기술연구원과 테스트가 끝나면, 해당 코드를 실험해볼것.
             
             if is_add==1:
-           
+                # perform_create
+                # test가 끝나면 이 부분은 삭제할 예정.
+                shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id, "car_number" : car_number }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine'
+                log.write(shell + '\n')
+                output=stream.read()
+                log.write(output + '\n')
 
-                postgres_machine_add(DB_HOST,DB_USER,DB_PASSWORD,DB,car_number,machine_id)
+                #postgres_machine_add(DB_HOST,DB_USER,DB_PASSWORD,DB,car_number,machine_id)
             # 현재 알 수 없는 오류로 postgres 에 insert가 실패할 시 이 client도 연결이 끊김.(재루프.)
             # 당장은 기능 자체에 문제는 없지만 이 경우 장기적으로 버그를 발생시킬 가능성이 있음.
             # 또한 보안적인 문제 때문에라도 결국은 rest api로 갈아타야 함.
 
 
             else :
-
-                postgres_sensor_insert(DB_HOST,DB_USER,DB_PASSWORD,DB,json.dumps(sensor),machine_id)
+                shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
+                log.write(shell + '\n')
+                output=stream.read()
+                log.write(output + '\n')
+                #postgres_sensor_insert(DB_HOST,DB_USER,DB_PASSWORD,DB,json.dumps(sensor),machine_id)
 
     
         log.write(str(datetime.datetime.now()) + '\n')
