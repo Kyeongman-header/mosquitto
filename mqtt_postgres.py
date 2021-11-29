@@ -16,59 +16,59 @@ DB='iot'
 DB_USER='auton'
 DB_PASSWORD='mypassword'
 
-def postgres_machine_add(host,user,password,db,car_number,machine_id):
-    try:
-        conn=pg2.connect(host=host,dbname=db,user=user,password=password)
-    except Exception as e:
-        with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            log.write("-----------------\n postgre sql connection error :( \n ---------------------")
-            log.write(e + '\n')
-        return
-    cur=conn.cursor()
-    query=f"INSERT INTO airfilter_machine(id,car_number,pub_date) VALUES ({machine_id}, {car_number},current_timestamp)"
-    try :
-        cur.execute("INSERT INTO airfilter_machine(id,car_number,pub_date) VALUES (%s, %s,current_timestamp)\n",(str(machine_id),str(car_number)))
-        conn.commit()
-    except pg2.DatabaseError as dberror:
-        with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            log.write("-----------------------\n insert query to machine table error :(\n ----------------------\n")
-            log.write(dberror + '\n')
-            conn.rollback()
-    else :
-        with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            log.write("insert success \n")
-            log.write(query + '\n')
+# def postgres_machine_add(host,user,password,db,car_number,machine_id):
+#     try:
+#         conn=pg2.connect(host=host,dbname=db,user=user,password=password)
+#     except Exception as e:
+#         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#             log.write("-----------------\n postgre sql connection error :( \n ---------------------")
+#             log.write(e + '\n')
+#         return
+#     cur=conn.cursor()
+#     query=f"INSERT INTO airfilter_machine(id,car_number,pub_date) VALUES ({machine_id}, {car_number},current_timestamp)"
+#     try :
+#         cur.execute("INSERT INTO airfilter_machine(id,car_number,pub_date) VALUES (%s, %s,current_timestamp)\n",(str(machine_id),str(car_number)))
+#         conn.commit()
+#     except pg2.DatabaseError as dberror:
+#         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#             log.write("-----------------------\n insert query to machine table error :(\n ----------------------\n")
+#             log.write(dberror + '\n')
+#             conn.rollback()
+#     else :
+#         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#             log.write("insert success \n")
+#             log.write(query + '\n')
             
-    conn.close()
+#     conn.close()
 
-def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
-    try:
-        conn=pg2.connect(host=host,dbname=db,user=user,password=password)
-    except Exception as e:
-        with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-                log.write("-----------------\n postgre sql connection error :(\n--------------------\n")
-                log.write(e + '\n')
-        return
+# def postgres_sensor_insert(host,user,password,db,sensor,machine_id):
+#     try:
+#         conn=pg2.connect(host=host,dbname=db,user=user,password=password)
+#     except Exception as e:
+#         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#             with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#                 log.write("-----------------\n postgre sql connection error :(\n--------------------\n")
+#                 log.write(e + '\n')
+#         return
 
-    cur=conn.cursor()
-    n=datetime.datetime.now()
-    query=f"INSERT INTO airfilter_sensor (machine_id,sensor,pub_date) VALUES ('{machine_id}', '{sensor}',current_timestamp)"
+#     cur=conn.cursor()
+#     n=datetime.datetime.now()
+#     query=f"INSERT INTO airfilter_sensor (machine_id,sensor,pub_date) VALUES ('{machine_id}', '{sensor}',current_timestamp)"
     
-    try :
-        cur.execute("INSERT INTO airfilter_sensor (machine_id,sensor,pub_date) VALUES (%s, %s, current_timestamp)\n",(str(machine_id),str(sensor)))
-        conn.commit()
-    except pg2.DatabaseError as dberror:
-        with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            log.write("------------------------\ninsert query to sensor table error :(\n-----------------------\n")
-            log.write(dberror + '\n')
-            conn.rollback()
-    else :
-        with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-            log.write("insert success : \n")
-            log.write(query + '\n')
+#     try :
+#         cur.execute("INSERT INTO airfilter_sensor (machine_id,sensor,pub_date) VALUES (%s, %s, current_timestamp)\n",(str(machine_id),str(sensor)))
+#         conn.commit()
+#     except pg2.DatabaseError as dberror:
+#         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#             log.write("------------------------\ninsert query to sensor table error :(\n-----------------------\n")
+#             log.write(dberror + '\n')
+#             conn.rollback()
+#     else :
+#         with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+#             log.write("insert success : \n")
+#             log.write(query + '\n')
 
-    conn.close()
+#     conn.close()
 
     
 
@@ -113,7 +113,7 @@ def on_message(client,userdata,msg):
             if is_add==1:
                 # perform_create
                 # test가 끝나면 이 부분은 삭제할 예정.
-                shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id, "car_number" : car_number }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
+                shell = 'curl -d ' + "'" + json.dumps({ "id" : machine_id, "car_number" : car_number }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
                 log.write(shell + '\n')
                 stream=os.popen(shell)
                 output=stream.read()
