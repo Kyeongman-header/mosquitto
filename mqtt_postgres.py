@@ -97,9 +97,9 @@ def on_message(client,userdata,msg):
         log.write(data + '\n')
         
         try :
-                  j=json.loads(data)
+            j=json.loads(data)
         except :
-                  log.write("Wrong Format. Try again.\n")
+            log.write("Wrong Format. Try again.\n")
         
         else :
             is_add=j["is_add"]
