@@ -4,6 +4,7 @@ import datetime
 import os
 import json
 
+
 HOST='localhost'
 USER='subscriber'
 PASSWORD='mypassword'
@@ -11,10 +12,7 @@ PORT=1883
 TOPIC='auton/airfilter'
 QOS=1
 
-DB_HOST='10.0.10.161'
-DB='iot'
-DB_USER='auton'
-DB_PASSWORD='mypassword'
+
 
 # def postgres_machine_add(host,user,password,db,car_number,machine_id):
 #     try:
