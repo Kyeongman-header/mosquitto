@@ -84,38 +84,24 @@ def on_disconnect(client, userdata, flags, rc=0):
 
 
 def on_message(client,userdata,msg):
-    
-    # 실제로는 json data로 받고 sensor와 car_number를 더 쉽게 파싱할 수 있음.
-    # 지금은 0 번째 숫자로 추가인지 아닌지 가리고, 1,2번째 숫자가 sensor값(혹은 차 넘버),
-    #3번째 숫자가 machine 고유 번호임.
-    with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
-        
-        data=str(msg.payload.decode("utf-8"))
-
-        log.write(data + '\n')
-        
-        try :
-            j=json.loads(data)
-        except :
-            log.write("Wrong Format. Try again.\n")
-        
-        else :
-            is_add=j["is_add"]
-            sensor=j["sensor"]
-            machine_id=j["machine"]
-            car_number=j["car_number"]
-        
-
-# 고등기술연구원과 테스트가 끝나면, 해당 코드를 실험해볼것.
-            
-            if is_add==1:
-                # perform_create
-                # test가 끝나면 이 부분은 삭제할 예정.
-                shell = 'curl -d ' + "'" + json.dumps({ "id" : machine_id, "car_number" : car_number }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
-                log.write(shell + '\n')
-                stream=os.popen(shell)
-                output=stream.read()
-                log.write(output + '\n')
+            with open("/home/ubuntu/mqtt_postgres.log",'a') as log :
+                        data=str(msg.payload.decode("utf-8"))
+                        log.write(data + '\n')
+                        try :
+                                    j=json.loads(data)
+                        except :
+                                    log.write("Wrong Format. Try again.\n")
+                        else :
+                                    is_add=j["is_add"]
+                                    sensor=j["sensor"]
+                                    machine_id=j["machine"]
+                                    car_number=j["car_number"]
+                        if is_add==1:
+                                    shell = 'curl -d ' + "'" + json.dumps({ "id" : machine_id, "car_number" : car_number }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
+                                    log.write(shell + '\n')
+                                    stream=os.popen(shell)
+                                    output=stream.read()
+                                    log.write(output + '\n')
 
                 #postgres_machine_add(DB_HOST,DB_USER,DB_PASSWORD,DB,car_number,machine_id)
             # 현재 알 수 없는 오류로 postgres 에 insert가 실패할 시 이 client도 연결이 끊김.(재루프.)
@@ -123,16 +109,16 @@ def on_message(client,userdata,msg):
             # 또한 보안적인 문제 때문에라도 결국은 rest api로 갈아타야 함.
 
 
-            else :
-                shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
-                log.write(shell + '\n')
-                stream=os.popen(shell)
-                output=stream.read()
-                log.write(output + '\n')
+                        else :
+                                    shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
+                                    log.write(shell + '\n')
+                                    stream=os.popen(shell)
+                                    output=stream.read()
+                                    log.write(output + '\n')
                 #postgres_sensor_insert(DB_HOST,DB_USER,DB_PASSWORD,DB,json.dumps(sensor),machine_id)
 
     
-        log.write(str(datetime.datetime.now()) + '\n')
+                        log.write(str(datetime.datetime.now()) + '\n')
 
             
 client=mqtt.Client()
