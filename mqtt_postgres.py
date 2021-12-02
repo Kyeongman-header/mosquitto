@@ -95,9 +95,9 @@ def on_message(client,userdata,msg):
                                     is_add=j["is_add"]
                                     sensor=j["sensor"]
                                     machine_id=j["machine"]
-                                    car_number=j["car_number"]
+                                    #car_number=j["car_number"]
                         if is_add==1:
-                                    shell = 'curl -d ' + "'" + json.dumps({ "id" : machine_id, "car_number" : car_number }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
+                                    shell = 'curl -d ' + "'" + json.dumps({ "id" : machine_id }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
                                     log.write(shell + '\n')
                                     stream=os.popen(shell)
                                     output=stream.read()
