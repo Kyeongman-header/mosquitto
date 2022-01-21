@@ -95,6 +95,7 @@ def on_message(client,userdata,msg):
                                     is_add=j["is_add"]
                                     sensor=j["sensor"]
                                     machine_id=j["machine"]
+                                    gps=j["gps"]
                                     #car_number=j["car_number"]
                         if is_add==1:
                                     shell = 'curl -d ' + "'" + json.dumps({ "id" : machine_id }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/api/machine/'
@@ -110,7 +111,7 @@ def on_message(client,userdata,msg):
 
 
                         else :
-                                    shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
+                                    shell = 'curl -d ' + "'" + json.dumps({ "machine" : machine_id , "sensor" : sensor , "gps" : gps }) + "'" + ' -H "Content-Type: application/json" -H "Authorization: Token ef00282ec7f582a7f3500952c6385b6de9b0de94" -X POST https://auton-iot.com/mqtt_postgres/'
                                     log.write(shell + '\n')
                                     stream=os.popen(shell)
                                     output=stream.read()
